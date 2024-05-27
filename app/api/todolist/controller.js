@@ -1,5 +1,5 @@
 const { StatusCodes } = require("http-status-codes");
-const { getAllTodolist, createTodoList, updateTodoList, deleteTodoList } = require("../../services/todolist");
+const { getAllTodolist, createTodoList, updateTodoList, deleteTodoList, setComplete, findOneTodolist } = require("../../services/todolist");
 
 const getAll = async (req, res, next) => {
   try {
@@ -45,4 +45,25 @@ const deleteTodo = async (req, res, next) => {
   }
 };
 
-module.exports = { getAll, createTodo, updateTodo, deleteTodo };
+const setCompleteTodo = async (req, res, next) => {
+  try {
+    const result = await setComplete(req);
+    res.status(StatusCodes.CREATED).json({
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const findOne = async (req, res, next) => {
+  try {
+    const result = await findOneTodolist(req);
+    res.status(StatusCodes.OK).json({
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+module.exports = { getAll, createTodo, updateTodo, deleteTodo, setCompleteTodo, findOne };
