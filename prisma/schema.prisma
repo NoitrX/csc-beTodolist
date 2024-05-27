@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  username String @unique
+  name String
+  password String
+  level Level @default(USER)
+  attachments TodoList_attachment[]
+  createdTodoLists Todolist[] @relation("CreatedByRelation")
+  updatedTodolists Todolist[] @relation("UpdatedByRelation")
+   createdTodoListsFile TodoList_attachment[] @relation("CreatedByRelations")
+  updatedTodolistsFile TodoList_attachment[] @relation("UpdatedByRelations")
+ 
+}
+
+
+model Todolist {
+  id Int @id @default(autoincrement())
+  name String 
+  createdBy Int
+  updatedBy Int? 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status Status @default(PENDING)
+  attachments TodoList_attachment[]
+  createdByUser User @relation("CreatedByRelation", fields: [createdBy], references: [id])
+  updatedByUser User? @relation("UpdatedByRelation", fields: [updatedBy], references: [id])
+}
+
+model TodoList_attachment {
+  id Int @id @default(autoincrement())
+  todolist Todolist @relation(fields: [todolistId], references: [id])
+  todolistId Int
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  file String
+  createdBy Int
+  updatedBy Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdByUser User @relation("CreatedByRelations", fields: [createdBy], references: [id])
+  updatedByUser User? @relation("UpdatedByRelations", fields: [updatedBy], references: [id])
+}
+
+enum Level {
+  USER
+  ADMIN
+}
+
+enum Status {
+  COMPLETED
+  ON_PROGRESS
+  PENDING
+}
