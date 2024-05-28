@@ -5,7 +5,7 @@ const getAllAttachment = async (req) => {
   const id = parseInt(req.params.id);
   const result = await prisma.todoList_attachment.findMany({
     where: {
-      id: id,
+      todolistId: id,
     },
     include: {
       createdByUser: {
@@ -36,13 +36,9 @@ const getAllAttachment = async (req) => {
 
 const inputAttachment = async (req) => {
   const id = parseInt(req.params.id);
-  const { file } = req.body;
-  const result = await prisma.todoList_attachment.update({
-    where: {
-      id: id,
-    },
+  const result = await prisma.todoList_attachment.create({
     data: {
-      file: file,
+      file: req.file ? `uploads/${req.file.filename}` : "",
       todolistId: id,
       createdBy: req.user.id,
     },

@@ -5,6 +5,7 @@ const logger = require("morgan");
 // Routing
 const loginRouter = require("./app/api/auth/router");
 const todoListRouter = require("./app/api/todolist/router");
+const todoListAttachmentRouter = require("./app/api/todolist_attachment/router");
 // MIDDLEWARE
 const handlerErrorMiddleware = require("./app/middlewares/handler-error");
 const app = express();
@@ -20,5 +21,6 @@ app.get("/", function (req, res) {
 const v1 = "/api/todo";
 app.use(v1, loginRouter);
 app.use(v1, todoListRouter);
+app.use(v1, todoListAttachmentRouter);
 app.use(handlerErrorMiddleware);
 app.listen(9000);

@@ -3,26 +3,37 @@ const prisma = new PrismaClient();
 const bcrypt = require("bcrypt");
 
 async function main() {
-  const hashPw = await bcrypt.hash("password", 10);
-  const user = await prisma.user.create({
-    data: {
-      username: "NoitrX",
-      name: "NaufhalZs",
-      password: hashPw,
-      level: "USER",
-    },
-  });
-  console.log(user);
-  // const todolist = await prisma.todolist.create({
+  // const hashPw = await bcrypt.hash("password", 10);
+  // const user = await prisma.user.create({
   //   data: {
-  //     name: "Belajar Prisma",
-  //     createdBy: 1,
-  //     updatedBy: 1,
-  //     createdAt: new Date(),
-  //     updatedAt: new Date(),
+  //     username: "NoitrX",
+  //     name: "NaufhalZs",
+  //     password: hashPw,
+  //     level: "USER",
   //   },
   // });
-  // console.log(todolist);
+  // console.log(user);
+  const todolist = await prisma.todolist.create({
+    data: {
+      name: "Belajar Prisma",
+      createdBy: 1,
+      updatedBy: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  });
+  console.log(todolist);
+
+  const todoListAttachment = await prisma.todoList_attachment.create({
+    data: {
+      todolistId: 1,
+      createdBy: 1,
+      file: "TEST",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  });
+  console.log(todoListAttachment);
 }
 
 main()
