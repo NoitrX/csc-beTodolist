@@ -1,5 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
-const { getAllAttachment, inputAttachment } = require("../../services/todolist_attachment");
+const { getAllAttachment, inputAttachment, downloadAttachment } = require("../../services/todolist_attachment");
+
 
 const getAll = async (req, res, next) => {
   try {
@@ -22,4 +23,15 @@ const inputDoc = async (req, res, next) => {
     next(err);
   }
 };
-module.exports = { getAll, inputDoc };
+
+const downloadDoc = async (req, res, next) => {
+  try {
+    const result = await downloadAttachment(req, res);
+    res.status(StatusCodes.OK).json({
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+module.exports = { getAll, inputDoc, downloadDoc };
